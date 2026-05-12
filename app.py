@@ -3,16 +3,15 @@ import os
 from flask import Flask, g
 from flask_wtf.csrf import CSRFProtect
 
-from db_conf import mongo_engine
+from db_conf import neo_host, mongo_host, mongo_engine
 from login_app import login_app, login_manager
 from pigeon_api import pigeon_api
 from pigeon_app import pigeon_app
 
 # app definition
 app = Flask(__name__)
-
-container_id = 'localhost' # 'cf558ed5c392'
-app.config['MONGODB_HOST'] = f'mongodb://{container_id}:27019/credentials'
+app.config['MONGODB_HOST'] = mongo_host
+app.config['NEO4J_HOST'] = neo_host
 mongo_engine.init_app(app)
 login_manager.init_app(app)
 csrf = CSRFProtect(app)

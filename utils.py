@@ -1,22 +1,22 @@
 from exceptions import  *
 import re
+from enum import Enum
 
 
-class PigeonGender:
-    HOLUB = {
-        "marking": "1.0",
-        "assoc_relationship": "OTEC"
-    }
-    HOLUBICE = {
-        "marking": "0.1",
-        "assoc_relationship": "MATKA"
-    }
-
+class PigeonGender(Enum):
+    HOLUB = ("1.0", "OTEC")
+    HOLUBICE = ("0.1", "MATKA")
+    
+    def __init__(self, marking, assoc_relationship):
+        self.marking = marking
+        self.assoc_relationship = assoc_relationship
+    
+    @staticmethod
     def get_gender_from_marking(marking):
-        if marking == "1.0":
-            return PigeonGender.HOLUB
-        elif marking == "0.1":
-            return PigeonGender.HOLUBICE
+        for gender in PigeonGender:
+            if gender.marking == marking:
+                return gender
+        return None
 
 
 def cislo_krouzku_full_from_id(pigeonID):

@@ -126,7 +126,7 @@ def edit_pigeon(pigeonID):
         new_pigeon_data = get_holub_data_from_form(request.form)
         # pokud se změní pohlaví, rozvázat vztah s případnými potomky
         if new_pigeon_data['pohlavi'] != old_pigeon['pohlavi']:
-            r_label = PigeonGender.get_gender_from_marking(old_pigeon['pohlavi'])["assoc_relationship"]
+            r_label = PigeonGender.get_gender_from_marking(old_pigeon['pohlavi']).assoc_relationship
             db.run(f"MATCH (p:Pigeon {{id: '{pigeonID}' }}), (p)-[r:{r_label}]->(:Pigeon) DELETE r")
 
         new_father_ckf = request.form.get('otec')

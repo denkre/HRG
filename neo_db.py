@@ -54,20 +54,20 @@ class NeoDb:
         result = db.run('MATCH (a:Pigeon) WHERE a.id = $id RETURN a AS pigeon', id=parent_id)
         parent_data = result.data()
         if len(parent_data) == 1:
-            if parent_data[0].get('pigeon').get("pohlavi") != parent_gender["marking"]:
-                raise WrongPigeonGenderException(parent_gender["assoc_relationship"], parent_data[0].get('pigeon').get("pohlavi"))
+            if parent_data[0].get('pigeon').get("pohlavi") != parent_gender.marking:
+                raise WrongPigeonGenderException(parent_gender.assoc_relationship, parent_data[0].get('pigeon').get("pohlavi"))
         # parent isnt in db yet
         else:
             user_id, cislo_krouzku, rocnik = split_pigeon_id(parent_id)
             data = {
                 'id': parent_id,
-                'pohlavi': parent_gender["marking"],
+                'pohlavi': parent_gender.marking,
                 'cislo_krouzku': cislo_krouzku,
                 'rocnik': rocnik
             }
             db.run('CREATE (p:Pigeon $data )', data=data)
 
-        relationship = parent_gender["assoc_relationship"]
+        relationship = parent_gender.assoc_relationship
         q = f"""MATCH
                 (a:Pigeon),
                 (b:Pigeon)
@@ -78,7 +78,7 @@ class NeoDb:
 
     @staticmethod
     def remove_parent(db, pigeon_id: int, parent_id: int, parent_gender):
-        r = parent_gender["assoc_relationship"]
+        r = parent_gender.assoc_relationship
         q = f"""
             MATCH (:Pigeon {{id: "{parent_id}"}} )-[r:{r}]->(:Pigeon {{id: "{pigeon_id}"}})
             DELETE r

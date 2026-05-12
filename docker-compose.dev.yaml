@@ -9,7 +9,6 @@ services:
       - '5000:5000'
     env_file:
       - '.env'
-    network_mode: "host"
     volumes:
       - '.:/usr/src/app/'
 

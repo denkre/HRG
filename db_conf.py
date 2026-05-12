@@ -5,8 +5,10 @@ from flask_login.mixins import UserMixin
 import redis
 
 
-neo_driver = GraphDatabase.driver("bolt://127.0.0.1:7689", auth=basic_auth("neo4j", "knock-cape-reserve"))
-r = redis.Redis(host='localhost', port=6381, db=0)
+neo_driver = GraphDatabase.driver("bolt://neo4j:7687", auth=basic_auth("neo4j", "knock-cape-reserve"))
+r = redis.Redis(host='redis', port=6379, db=0)
+neo_host = 'http://neo4j:7474'
+mongo_host = 'mongodb://mongodb:27017/credentials'
 mongo_engine = MongoEngine()
 
 class User(mongo_engine.Document):

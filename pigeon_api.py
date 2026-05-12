@@ -3,7 +3,7 @@ import requests as requests
 
 from flask import Blueprint, g, request, jsonify
 
-from db_conf import neo_driver
+from db_conf import neo_driver, neo_host
 from db_conf import r as redis
 
 
@@ -73,7 +73,7 @@ def delete_pigeon():
 
 @pigeon_api.route("/api/get-neograph-pigeon-all")
 def get_neograph_pigeon2():
-    url = 'http://localhost:7476/db/neo4j/tx/commit'
+    url = f"{neo_host}/db/neo4j/tx/commit"
     data = {
      "statements": [
                         {
@@ -92,7 +92,7 @@ def get_neograph_pigeon2():
 def get_neograph_pigeon():
     pigeon_id = request.args.get('pigeonID')
     only_ancestors = request.args.get('only_ancestors', False)
-    url = 'http://localhost:7476/db/neo4j/tx/commit'
+    url = f"{neo_host}/db/neo4j/tx/commit"
     if only_ancestors == "true":
         r_key = f"visualize-pedigree-{pigeon_id}"
         statement = f"MATCH path=((p:Pigeon)-[*0..10]->(:Pigeon {{id : '{pigeon_id}'}})) return p, path"
